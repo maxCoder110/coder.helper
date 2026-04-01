@@ -3,321 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Code Mastery</title>
+    <title>Code Glow Learner</title>
     <style>
         :root {
-            --bg-color: #050510;
-            --neon-blue: #00f3ff;
-            --neon-pink: #ff00ea;
-            --neon-green: #39ff14;
-            --text-color: #ffffff;
+            --blue-glow: 0 0 20px 5px rgba(0, 150, 255, 0.7);
+            --red-glow: 0 0 30px 10px rgba(255, 0, 0, 0.9);
+            --green-glow: 0 0 30px 10px rgba(0, 255, 0, 0.9);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 3rem;
-            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
-            margin-bottom: 40px;
+        /* Menu Styles */
+        .menu-bar {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
         }
 
-        /* Neon Button Styles */
-        .neon-btn {
-            background: transparent;
-            color: var(--neon-blue);
-            border: 2px solid var(--neon-blue);
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-family: inherit;
+        button {
+            padding: 10px 20px;
             cursor: pointer;
+            background: #222;
+            color: white;
+            border: 1px solid #444;
             border-radius: 5px;
-            margin: 10px;
             transition: 0.3s;
-            box-shadow: 0 0 5px var(--neon-blue), inset 0 0 5px var(--neon-blue);
         }
 
-        .neon-btn:hover {
-            background: var(--neon-blue);
-            color: var(--bg-color);
-            box-shadow: 0 0 20px var(--neon-blue), inset 0 0 10px var(--neon-blue);
-        }
-
-        .python-btn {
-            color: var(--neon-green);
-            border-color: var(--neon-green);
-            box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green);
-        }
-
-        .python-btn:hover {
-            background: var(--neon-green);
-            color: var(--bg-color);
-            box-shadow: 0 0 20px var(--neon-green), inset 0 0 10px var(--neon-green);
-        }
-
-        /* Layout Containers */
-        .screen { display: none; width: 100%; max-width: 1200px; }
-        .active-screen { display: block; }
+        button:hover { background: #333; border-color: #0096ff; }
+        button.active { background: #0096ff; border-color: white; }
 
         /* Level Grid */
         .level-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            width: 100%;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .level-card {
-            border: 1px solid var(--neon-pink);
-            padding: 20px;
-            text-align: center;
+            width: 80px;
+            height: 80px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 5px var(--neon-pink);
-            transition: 0.3s;
             position: relative;
         }
 
-        .level-card:hover {
-            box-shadow: 0 0 15px var(--neon-pink);
-            transform: translateY(-2px);
+        /* Hover Tooltip */
+        .level-card:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            width: 150px;
+            font-size: 12px;
+            text-align: center;
+            z-index: 10;
+            border: 1px solid #0096ff;
         }
 
-        /* Workspace Layout */
-        .workspace {
-            display: flex;
-            gap: 20px;
-            height: 60vh;
+        /* Typing Area */
+        #glow-container {
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: var(--blue-glow);
+            transition: box-shadow 0.2s ease;
             margin-top: 20px;
         }
 
-        .editor-container, .preview-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
-            padding: 10px;
-            border-radius: 5px;
-            background: #0a0a1a;
-        }
-
-        .target-code {
-            color: #888;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-            user-select: none;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .target-code span.correct { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
-        .target-code span.incorrect { color: #ff0044; background: rgba(255,0,68,0.3); }
-
-        textarea {
-            flex: 1;
-            background: transparent;
-            color: transparent; /* Hide text, show caret */
-            caret-color: white;
+        #typing-area {
+            width: 600px;
+            height: 150px;
+            background-color: black;
+            color: white;
             border: none;
-            font-family: inherit;
-            font-size: 1rem;
-            resize: none;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
             outline: none;
-            z-index: 2;
+            resize: none;
         }
 
-        /* We overlay the target text and textarea so typing feels natural */
-        .typing-area {
-            position: relative;
-            flex: 2;
-            display: flex;
-            flex-direction: column;
+        .target-box {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            color: #00ff00;
         }
 
-        iframe {
+        .status-text { margin-top: 10px; font-weight: bold; }
+
+        /* Custom AI Area */
+        .custom-section {
+            margin-top: 40px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
             width: 100%;
-            height: 100%;
-            border: none;
-            background: white; /* Browsers expect white bg for standard HTML render */
-        }
-        
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width: 600px;
+            text-align: center;
         }
 
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="main-menu" class="screen active-screen">
-        <h1>NEON_CODE</h1>
-        <div style="display: flex; justify-content: center; gap: 20px;">
-            <button class="neon-btn" onclick="showLevelSelect('html')">HTML Track</button>
-            <button class="neon-btn python-btn" onclick="showLevelSelect('python')">Python Track</button>
-        </div>
-        <div style="text-align: center; margin-top: 40px;">
-            <button class="neon-btn" style="border-color: var(--neon-pink); color: var(--neon-pink);" onclick="alert('AI Integration Endpoint Required. (Coming Soon)')">Generate Custom AI Level</button>
-        </div>
+    <h1>Code Master Academy</h1>
+
+    <div class="menu-bar">
+        <button id="html-btn" class="active" onclick="switchLang('HTML')">HTML Mode</button>
+        <button id="py-btn" onclick="switchLang('Python')">Python Mode</button>
     </div>
 
-    <div id="level-select" class="screen">
-        <div class="header-controls">
-            <button class="neon-btn" onclick="showScreen('main-menu')">← Back to Menu</button>
-            <h2 id="track-title" style="text-shadow: 0 0 10px var(--neon-blue);">HTML Levels</h2>
+    <div class="level-grid" id="level-grid">
         </div>
-        <div class="level-grid" id="level-grid-container">
-            </div>
+
+    <div id="game-area">
+        <div id="level-info">
+            <h3 id="current-task-title">Select a level to start</h3>
+            <div class="target-box" id="target-display">Your target code will appear here...</div>
+        </div>
+
+        <div id="glow-container">
+            <textarea id="typing-area" placeholder="Type here..." disabled></textarea>
+        </div>
+        <div class="status-text" id="status">Progress: Level 0 (Sub 0/3)</div>
     </div>
 
-    <div id="workspace" class="screen">
-        <div class="header-controls">
-            <button class="neon-btn" onclick="showScreen('level-select')">← Levels</button>
-            <h2 id="current-level-title">Level 1.1</h2>
-            <button class="neon-btn" onclick="runCode()">Run Code ▶</button>
-        </div>
-        
-        <div class="workspace">
-            <div class="editor-container typing-area">
-                <div id="target-display" class="target-code"></div>
-                <textarea id="user-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></textarea>
-            </div>
-            <div class="preview-container">
-                <h3 style="margin-top: 0; color: #888;">Live Preview</h3>
-                <iframe id="live-preview"></iframe>
-            </div>
-        </div>
+    <div class="custom-section">
+        <h3>Custom AI Level</h3>
+        <input type="text" id="ai-input" placeholder="e.g. 'Make a level about links'" style="padding:10px; width:70%;">
+        <button onclick="generateAILevel()">Generate</button>
     </div>
 
     <script>
-        // --- DATA STRUCTURE ---
-        // 10 Levels, 3 Sub-levels each. Here is the framework.
-        const courseData = {
-            html: [
-                {
-                    level: 1, title: "Level 1: The Foundations",
-                    sublevels: [
-                        { id: "1.1", title: "Level 1.1: Hello World", tooltip: "Learn the basic structure of a webpage using tags.", code: "<h1>Hello World!</h1>\n<p>Welcome to the Neon Web.</p>" },
-                        { id: "1.2", title: "Level 1.2: Bold & Italic", tooltip: "Use formatting tags to style your text.", code: "<h1>Formatting</h1>\n<p>This is <b>bold</b> and this is <i>italic</i>.</p>" },
-                        { id: "1.3", title: "Level 1.3: Creating Lists", tooltip: "Organize data using unordered lists.", code: "<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>Python</li>\n</ul>" }
-                    ]
-                },
-                // Add Levels 2 through 10 here following the same structure
+        let currentLang = 'HTML';
+        let currentLevel = 1;
+        let currentSub = 1;
+        let targetCode = "";
+
+        const levels = {
+            HTML: [
+                { title: "Headers", desc: "Learn structure with H1-H3 tags.", sub: ["<h1>Title</h1>", "<h2>Subtitle</h2>", "<h3>Small Header</h3>"] },
+                { title: "Paragraphs", desc: "Using the P tag for text.", sub: ["<p>Hello</p>", "<p>World</p>", "<p>Code</p>"] },
+                { title: "Links", desc: "Creating anchor tags.", sub: ["<a href='#'>Link</a>", "<a>Click me</a>", "<a target='_blank'>"] },
+                { title: "Images", desc: "Adding images to sites.", sub: ["<img src=''>", "<img alt='dog'>", "<img width='100'>"] },
+                // ... placeholders for 5-10
             ],
-            python: [
-                {
-                    level: 1, title: "Level 1: Python Basics",
-                    sublevels: [
-                        { id: "1.1", title: "Level 1.1: Print Statements", tooltip: "Output text to the console.", code: "print('Welcome to the Python Track')\nprint('Initializing...')" },
-                        { id: "1.2", title: "Level 1.2: Variables", tooltip: "Store data in variables.", code: "player_name = 'Bruce'\nlevel = 1\nprint(player_name, level)" },
-                        { id: "1.3", title: "Level 1.3: Basic Loops", tooltip: "Use a for loop to repeat actions.", code: "for i in range(3):\n    print('Neon system active')" }
-                    ]
-                }
+            Python: [
+                { title: "Printing", desc: "Learn to output text.", sub: ["print('Hi')", "print(123)", "print('Done')"] },
+                { title: "Variables", desc: "Storing data in names.", sub: ["x = 5", "name = 'Bruce'", "is_coding = True"] },
+                { title: "Lists", desc: "Groups of items.", sub: ["my_list = []", "items = [1, 2]", "list.append(1)"] },
+                { title: "Loops", desc: "Repeat code logic.", sub: ["for i in range(5):", "while True:", "while x < 10:"] }
             ]
         };
 
-        let currentTrack = 'html';
-        let currentTargetCode = '';
+        // Fill in placeholders to reach 10 levels
+        ['HTML', 'Python'].forEach(lang => {
+            while(levels[lang].length < 10) {
+                levels[lang].push({ title: "Level " + (levels[lang].length + 1), desc: "Advanced coding challenge.", sub: ["# Coming soon", "# Practice more", "# Master code"] });
+            }
+        });
 
-        // --- DOM ELEMENTS ---
-        const userInput = document.getElementById('user-input');
-        const targetDisplay = document.getElementById('target-display');
-        const livePreview = document.getElementById('live-preview');
-
-        // --- NAVIGATION LOGIC ---
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.getElementById(screenId).classList.add('active-screen');
-        }
-
-        function showLevelSelect(track) {
-            currentTrack = track;
-            showScreen('level-select');
-            
-            document.getElementById('track-title').innerText = track.toUpperCase() + " Levels";
-            const grid = document.getElementById('level-grid-container');
-            grid.innerHTML = ''; // Clear previous
-
-            // Populate the grid based on data
-            courseData[track].forEach(levelData => {
-                levelData.sublevels.forEach(sub => {
-                    const card = document.createElement('div');
-                    card.className = 'level-card';
-                    // The title attribute creates the native hover tooltip you requested
-                    card.title = sub.tooltip; 
-                    card.innerHTML = `<h3>${sub.title}</h3><p style="font-size: 0.8rem; color: #aaa;">Hover to see mission</p>`;
-                    card.onclick = () => loadLevel(sub);
-                    grid.appendChild(card);
-                });
+        function initGrid() {
+            const grid = document.getElementById('level-grid');
+            grid.innerHTML = '';
+            levels[currentLang].forEach((lvl, index) => {
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                card.innerText = index + 1;
+                card.setAttribute('data-tooltip', lvl.title + ": " + lvl.desc);
+                card.onclick = () => startLevel(index + 1);
+                grid.appendChild(card);
             });
         }
 
-        function loadLevel(sublevel) {
-            showScreen('workspace');
-            document.getElementById('current-level-title').innerText = sublevel.title;
-            currentTargetCode = sublevel.code;
-            userInput.value = '';
-            livePreview.srcdoc = ''; // Reset preview
-            updateTypingDisplay();
+        function switchLang(lang) {
+            currentLang = lang;
+            document.getElementById('html-btn').classList.toggle('active', lang === 'HTML');
+            document.getElementById('py-btn').classList.toggle('active', lang === 'Python');
+            initGrid();
         }
 
-        // --- TYPING MECHANIC ---
-        userInput.addEventListener('input', updateTypingDisplay);
+        function startLevel(lvlNum) {
+            currentLevel = lvlNum;
+            currentSub = 1;
+            loadSubLevel();
+        }
 
-        function updateTypingDisplay() {
-            const typed = userInput.value;
-            let displayHTML = '';
-            let isPerfect = true;
+        function loadSubLevel() {
+            const data = levels[currentLang][currentLevel - 1];
+            targetCode = data.sub[currentSub - 1];
+            document.getElementById('current-task-title').innerText = `${data.title} (Part ${currentSub}/3)`;
+            document.getElementById('target-display').innerText = targetCode;
+            document.getElementById('typing-area').value = "";
+            document.getElementById('typing-area').disabled = false;
+            document.getElementById('typing-area').focus();
+            updateStatus();
+        }
 
-            for (let i = 0; i < currentTargetCode.length; i++) {
-                if (i < typed.length) {
-                    if (typed[i] === currentTargetCode[i]) {
-                        displayHTML += `<span class="correct">${currentTargetCode[i]}</span>`;
+        function updateStatus() {
+            document.getElementById('status').innerText = `Progress: ${currentLang} Level ${currentLevel} (Sub ${currentSub}/3)`;
+        }
+
+        const input = document.getElementById('typing-area');
+        const container = document.getElementById('glow-container');
+
+        input.addEventListener('input', () => {
+            const val = input.value;
+
+            if (val === targetCode) {
+                container.style.boxShadow = "var(--green-glow)";
+                setTimeout(() => {
+                    if (currentSub < 3) {
+                        currentSub++;
+                        loadSubLevel();
+                        container.style.boxShadow = "var(--blue-glow)";
                     } else {
-                        displayHTML += `<span class="incorrect">${currentTargetCode[i]}</span>`;
-                        isPerfect = false;
+                        alert("Level Complete! Choose a new one from the grid.");
+                        input.disabled = true;
                     }
-                } else {
-                    displayHTML += currentTargetCode[i];
-                }
+                }, 500);
+            } else if (targetCode.startsWith(val)) {
+                container.style.boxShadow = "var(--blue-glow)";
+            } else {
+                container.style.boxShadow = "var(--red-glow)";
             }
+        });
 
-            // Handle newlines properly in HTML
-            targetDisplay.innerHTML = displayHTML;
-
-            // Auto-run if completed perfectly
-            if (typed === currentTargetCode) {
-                runCode();
-                alert("Level Complete! Great typing.");
-            }
+        function generateAILevel() {
+            const prompt = document.getElementById('ai-input').value;
+            if (!prompt) return;
+            alert("AI Generating: " + prompt);
+            // Simulated AI Result
+            targetCode = "print('Custom AI Level Ready!')";
+            document.getElementById('target-display').innerText = targetCode;
+            document.getElementById('current-task-title').innerText = "AI Custom Level";
+            input.value = "";
+            input.disabled = false;
         }
 
-        // --- LIVE COMPILER ---
-        function runCode() {
-            const codeToRun = userInput.value;
-            if (currentTrack === 'html') {
-                // For HTML, we inject it directly into the iframe
-                livePreview.srcdoc = codeToRun;
-            } else if (currentTrack === 'python') {
-                // Python requires a backend or Pyodide. For this learning tool, we mock the console output.
-                livePreview.srcdoc = `<body style="background: #111; color: #39ff14; font-family: monospace; padding: 20px;">
-                    <h3>> Python Console Simulated Output:</h3>
-                    <p>Executing...</p>
-                    <pre>${codeToRun}</pre>
-                </body>`;
-            }
-        }
+        initGrid();
     </script>
 </body>
 </html>
